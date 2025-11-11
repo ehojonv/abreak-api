@@ -16,11 +16,11 @@ public interface BreakRepo extends JpaRepository<Break, Long> {
 
     @Query("SELECT p FROM ab_break p WHERE p.id_user = :userId " +
             "AND FUNCTION('TRUNC', p.date_time) = FUNCTION('TRUNC', CURRENT_TIMESTAMP)")
-    List<Break> findPausasHoje(@Param("userId") Long userId);
+    List<Break> findBreaksToday(@Param("userId") Long userId);
 
     // Contar pausas de hoje
     @Query("SELECT COUNT(p) FROM ab_break p WHERE p.id_user = :userId " +
             "AND FUNCTION('TRUNC', p.date_time) = FUNCTION('TRUNC', CURRENT_TIMESTAMP)")
-    Long countPausasHoje(@Param("userId") Long userId);
+    Long countBreaksToday(@Param("userId") Long userId);
 
 }
