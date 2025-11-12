@@ -33,6 +33,7 @@ public class Break {
     @JoinColumn(name = "user_id")
     private User user;
 
+    //TODO: Arrumar para coluna ser break_type no banco
     private BreakType type;
 
     private LocalDateTime dateTime;

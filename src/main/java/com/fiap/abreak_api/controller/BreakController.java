@@ -22,42 +22,52 @@ import com.fiap.abreak_api.service.BreakService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("api/breaks")
 @RequiredArgsConstructor
+@Slf4j
 public class BreakController {
 
     private final BreakService service;
 
     @PostMapping
-    public ResponseEntity<BreakDTO> registrar(@Valid @RequestBody RequestBreakDTO dto) {
-        BreakDTO pausa = service.create(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(pausa);
+    public ResponseEntity<BreakDTO> create(@Valid @RequestBody RequestBreakDTO dto) {
+
+        log.info("criando pausa: {}", dto);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(service.create(dto));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<BreakDTO> buscarPorId(@PathVariable Long id) {
-        BreakDTO pausa = service.findById(id);
-        return ResponseEntity.ok(pausa);
+    @GetMapping("{id}")
+    public ResponseEntity<BreakDTO> findById(@PathVariable Long id) {
+        log.info("recuperando pausa pelo id: {}", id);
+        return ResponseEntity
+                .ok(service.findById(id));
     }
 
-    @GetMapping("/hoje/{usuarioId}")
-    public ResponseEntity<List<BreakDTO>> listarPausasHoje(@PathVariable Long usuarioId) {
-        List<BreakDTO> pausas = service.getBreaksToday(usuarioId);
-        return ResponseEntity.ok(pausas);
+    @GetMapping("today/{userId}")
+    public ResponseEntity<List<BreakDTO>> listBreaksToday(@PathVariable Long userId) {
+        log.info("recuperando pausas hoje do usuario: {}", userId);
+        return ResponseEntity
+                .ok(service.getBreaksToday(userId));
     }
 
-    @GetMapping("/usuario/{usuarioId}")
-    public ResponseEntity<Page<BreakDTO>> listarPausasUsuario(
-            @PathVariable Long usuarioId,
-            @PageableDefault(size = 20, sort = "dataHora", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<BreakDTO> pausas = service.getUserBreaks(usuarioId, pageable);
-        return ResponseEntity.ok(pausas);
+    @GetMapping("user/{userId}")
+    public ResponseEntity<Page<BreakDTO>> listUserBreaks(
+            @PathVariable Long userId,
+            @PageableDefault(size = 10, sort = "date_time", direction = Sort.Direction.DESC) Pageable pageable) {
+
+        log.info("recuperando pausas do usuario pelo id: {}", userId);
+        return ResponseEntity
+                .ok(service.getUserBreaks(userId, pageable));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+                log.info("deletando pausa pelo id: {}", id);
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
