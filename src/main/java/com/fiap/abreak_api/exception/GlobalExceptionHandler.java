@@ -1,4 +1,4 @@
-package com.fiap.abreak_api.config;
+package com.fiap.abreak_api.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
