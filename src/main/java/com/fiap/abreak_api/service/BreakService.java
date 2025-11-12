@@ -16,16 +16,14 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class PausaService {
+public class BreakService {
 
     private final BreakRepo repo;
     private final UserService userService;
 
     public BreakDTO create(RequestBreakDTO dto) {
-        // Buscar usuário
         var usuario = userService.findEntityById(dto.userId());
 
-        // Criar pausa
         var pausa = Break.builder()
                 .user(usuario)
                 .type(BreakType.valueOf(dto.breakType()))
@@ -56,7 +54,7 @@ public class PausaService {
                 .map(this::toDto);
     }
 
-    public void deletar(Long id) {
+    public void delete(Long id) {
         if (!repo.existsById(id)) {
             throw new IllegalArgumentException("Pausa não encontrada");
         }
