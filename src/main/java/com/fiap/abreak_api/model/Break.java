@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import com.fiap.abreak_api.dto.BreakType;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Builder.Default;
 
 @Data
 @NoArgsConstructor
@@ -33,10 +36,11 @@ public class Break {
     @JoinColumn(name = "user_id")
     private User user;
 
-    //TODO: Arrumar para coluna ser break_type no banco
-    private BreakType type;
+    @Enumerated(EnumType.STRING)
+    private BreakType breakType;
 
-    private LocalDateTime dateTime;
+    @Default
+    private LocalDateTime dateTime = LocalDateTime.now();
 
     private Integer durationSeconds;
     

@@ -51,7 +51,7 @@ public class UserController {
 
         @GetMapping
         public ResponseEntity<Page<UserDTO>> getAll(
-                        @PageableDefault(size = 10, sort = "user_name", direction = Sort.Direction.ASC) Pageable pageable) {
+                        @PageableDefault(size = 10, direction = Sort.Direction.ASC) Pageable pageable) {
 
                 log.info("recuperando usuarios");
                 return ResponseEntity
@@ -60,7 +60,7 @@ public class UserController {
         }
 
         @PutMapping("{id}")
-        public ResponseEntity<UserDTO> update(@PathVariable Long id, @Valid @RequestBody RequestUserDTO dto) {
+        public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody RequestUserDTO dto) {
                 log.info("atualizando usuario '{}' com: {}", id, dto);
                 return ResponseEntity
                                 .ok(

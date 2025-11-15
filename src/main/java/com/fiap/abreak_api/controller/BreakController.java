@@ -58,7 +58,7 @@ public class BreakController {
     @GetMapping("user/{userId}")
     public ResponseEntity<Page<BreakDTO>> listUserBreaks(
             @PathVariable Long userId,
-            @PageableDefault(size = 10, sort = "date_time", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(size = 10, direction = Sort.Direction.DESC) Pageable pageable) {
 
         log.info("recuperando pausas do usuario pelo id: {}", userId);
         return ResponseEntity
