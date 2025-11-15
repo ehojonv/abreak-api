@@ -1,5 +1,7 @@
 package com.fiap.abreak_api.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -26,8 +28,9 @@ public class BreakService {
 
         var pausa = Break.builder()
                 .user(usuario)
-                .type(BreakType.valueOf(dto.breakType()))
+                .breakType(BreakType.valueOf(dto.breakType()))
                 .durationSeconds(dto.durationSeconds())
+                .dateTime(LocalDateTime.now())
                 .build();
 
         pausa = repo.save(pausa);
@@ -42,8 +45,10 @@ public class BreakService {
         return toDto(pausa);
     }
 
-    public List<BreakDTO> getBreaksToday(Long usuarioId) {
-        return repo.findBreaksToday(usuarioId)
+    public List<BreakDTO> getBreaksToday(Long userId) {
+        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1);
+        return repo.findByUserIdAndDateTimeBetween(userId, startOfDay, endOfDay)
                 .stream()
                 .map(this::toDto)
                 .toList();
@@ -65,7 +70,7 @@ public class BreakService {
         return new BreakDTO(
                 pause.getId(),
                 userService.toDto(pause.getUser()),
-                pause.getType(),
+                pause.getBreakType(),
                 formatDuration(pause.getDurationSeconds()));
     }
 

@@ -1,26 +1,26 @@
 package com.fiap.abreak_api.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import com.fiap.abreak_api.model.Break;
 
+@Repository
 public interface BreakRepo extends JpaRepository<Break, Long> {
 
-    Page<Break> findByUserIdOrderByDateTimeDesc(Long userId, Pageable pageable);
+        Page<Break> findByUserIdOrderByDateTimeDesc(Long userId, Pageable pageable);
 
-    @Query("SELECT p FROM ab_break p WHERE p.id_user = :userId " +
-            "AND FUNCTION('TRUNC', p.date_time) = FUNCTION('TRUNC', CURRENT_TIMESTAMP)")
-    List<Break> findBreaksToday(@Param("userId") Long userId);
+        List<Break> findByUserIdAndDateTimeBetween(Long userId,
+                        LocalDateTime start,
+                        LocalDateTime end);
 
-    // Contar pausas de hoje
-    @Query("SELECT COUNT(p) FROM ab_break p WHERE p.id_user = :userId " +
-            "AND FUNCTION('TRUNC', p.date_time) = FUNCTION('TRUNC', CURRENT_TIMESTAMP)")
-    Long countBreaksToday(@Param("userId") Long userId);
+        Long countByUserIdAndDateTimeBetween(Long userId,
+                        LocalDateTime start,
+                        LocalDateTime end);
 
 }

@@ -1,5 +1,8 @@
 package com.fiap.abreak_api.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -80,7 +83,11 @@ public class UserService {
     }
 
     protected UserDTO toDto(User user) {
-        var breaksToday = breakRepo.countBreaksToday(user.getId());
+
+        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1);
+
+        var breaksToday = breakRepo.countByUserIdAndDateTimeBetween(user.getId(), startOfDay, endOfDay);
         var quotaStatus = calculateQuotaStatus(breaksToday.intValue(), user.getBreaksQuota());
 
         return new UserDTO(
