@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,6 +49,14 @@ public class BreakController {
                 .ok(service.findById(id));
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<BreakDTO> update(@PathVariable Long id, @RequestBody RequestBreakDTO dto) {
+        log.info("atualizando pausa '{}' com: {}", id, dto);
+        return ResponseEntity
+                .ok(
+                        service.update(id, dto));
+    }
+
     @GetMapping("today/{userId}")
     public ResponseEntity<List<BreakDTO>> listBreaksToday(@PathVariable Long userId) {
         log.info("recuperando pausas hoje do usuario: {}", userId);
@@ -67,7 +76,7 @@ public class BreakController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-                log.info("deletando pausa pelo id: {}", id);
+        log.info("deletando pausa pelo id: {}", id);
         service.delete(id);
         return ResponseEntity.noContent().build();
     }

@@ -79,4 +79,12 @@ public class BreakService {
         int secs = seconds % 60;
         return String.format("%dmin %ds", minutes, secs);
     }
+
+    public BreakDTO update(Long id, RequestBreakDTO dto) {
+        var existing = repo.findById(id).orElseThrow(() -> new IllegalArgumentException("Pausa não encontrada"));
+
+        existing.setBreakType(dto.breakType() != null ? BreakType.valueOf(dto.breakType()) : existing.getBreakType());
+
+        return toDto(repo.save(existing));
+    }
 }
